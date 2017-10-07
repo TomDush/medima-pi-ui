@@ -1,27 +1,23 @@
-# MediaPiUi
+# Medima PI UI
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.4.
+## Abstract
 
-## Development server
+This application is part of Medima Project: a multi part application providing tools to manage more efficiently medias.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+For best result, it must be used in conjunction of:
 
-## Code scaffolding
+* Medima PI (server): go lang REST service, designed to run on Raspberry PI 3, exposing available medias.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+## Contribute
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+### Development server
 
-## Running unit tests
+Checkout [medima-pi](https://github.com/TomDush/medima-pi) and run `./grun` to start server side (port 8080).  
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Then run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+---------------------------------------
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+_This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.4._
