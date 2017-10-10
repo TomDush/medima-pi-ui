@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {File} from './domain';
 import {HttpClient} from '@angular/common/http';
+import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class FileController {
@@ -9,19 +10,10 @@ export class FileController {
   }
 
   browseRoot(): Promise<File> {
-    return new Promise(resolve => {
-        this.http.get<File>('/api/browser').subscribe(data => {
+    return this.http.get<File>('/api/browser').toPromise();
+  }
 
-          console.log('Got answer from browser: ' + data.name + ' with ' + data.children.length + ' children');
-          resolve(data);
-        });
-      }
-    );
+  browseFile(path: string): Promise<File> {
+    return this.http.get<File>('/api/browser/' + encodeURI(path)).toPromise();
   }
 }
-
-
-const files: File[] = [
-  {name: 'Foo', children: []},
-  {name: 'Bar', children: []}
-];

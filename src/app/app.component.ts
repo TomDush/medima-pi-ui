@@ -3,7 +3,8 @@ import {Component} from '@angular/core';
 @Component({
   selector: 'app-root',
   template: `
-    <app-browser></app-browser>
+    <h1>Welcome to Medima PI</h1>
+    <!-- Template end... -->
     <router-outlet></router-outlet>
   `
 })

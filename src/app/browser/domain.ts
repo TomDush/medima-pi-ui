@@ -1,8 +1,9 @@
 export class File {
   name: string;
+  pathId: string;
   root: string;
 
-  parentUrl: string;
+  parentId: string;
   detailUrl: string;
 
   playUrl: string;

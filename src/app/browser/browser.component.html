@@ -1,5 +1,21 @@
-<h1>Browser</h1>
+<h2>Browser</h2>
 
-<ul>
-  <li *ngFor="let file of files">{{file.name}} ({{file.detailUrl}})</li>
-</ul>
+<nav>
+  <a [routerLink]="['/browser']" style="cursor: pointer">All Roots</a> |
+  <a (click)="previous()" href="" style="cursor: pointer">Previous</a> |
+  <a [routerLink]="['/browser', file.parentId]" *ngIf="file && file.parentId" style="cursor: pointer">Parent
+    ({{file.parentId}})</a>
+</nav>
+
+<div *ngIf="file">
+  <h4>{{file.name}}</h4>
+
+  <ul>
+    <li *ngFor="let f of file.children" style="cursor: pointer" title="{{f.pathId}}"><a
+      [routerLink]="['/browser', f.pathId]">
+      {{f.name}}
+      ({{f.detailUrl}})
+    </a>
+    </li>
+  </ul>
+</div>
