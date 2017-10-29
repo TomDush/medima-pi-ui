@@ -1,21 +1,37 @@
-<h2>Browser</h2>
+<div class="container-fluid">
+  <h2>Browser</h2>
 
-<nav>
-  <a [routerLink]="['/browser']" style="cursor: pointer">All Roots</a> |
-  <a (click)="previous()" href="" style="cursor: pointer">Previous</a> |
-  <a [routerLink]="['/browser', file.parentId]" *ngIf="file && file.parentId" style="cursor: pointer">Parent
-    ({{file.parentId}})</a>
-</nav>
+  <!--<nav class="nav nav-pills col-auto">-->
+  <!--<a [routerLink]="['/browser']" class="nav-link" [class.active]="isRoot()"><i class="oi oi-home"></i> Shares</a>-->
+  <!--<a (click)="previous()" href="" class="nav-link"><i class="oi oi-arrow-circle-left"></i> Previous</a>-->
+  <!--<a [routerLink]="['/browser', file.parentId]" *ngIf="file && file.parentId" class="nav-link"><i-->
+  <!--class="oi oi-arrow-circle-top"></i> Parent</a>-->
+  <!--</nav>-->
 
-<div *ngIf="file">
-  <h4>{{file.name}}</h4>
+  <div *ngIf="file">
+    <nav aria-label="breadcrumb" role="navigation">
+      <ol class="breadcrumb">
+        <li *ngIf="!isRoot()" class="breadcrumb-item" aria-current="page"><a [routerLink]="['/browser']"><i
+          class="oi oi-home"></i> Shares</a>
+        </li>
+        <li *ngIf="isRoot()" class="breadcrumb-item active" aria-current="page"><i class="oi oi-home"></i> Shares</li>
+        <li *ngFor="let path of splitPath()" class="breadcrumb-item"><a [routerLink]="['/browser', path.pathId]">{{path.name}}</a>
+        </li>
+        <li *ngIf="!isRoot()" class="breadcrumb-item active" aria-current="page">{{file.name}}</li>
+      </ol>
+    </nav>
 
-  <ul>
-    <li *ngFor="let f of file.children" style="cursor: pointer" title="{{f.pathId}}"><a
-      [routerLink]="['/browser', f.pathId]">
-      {{f.name}}
-      ({{f.detailUrl}})
-    </a>
-    </li>
-  </ul>
+    <table class="table table-striped table-bordered table-hover table-sm">
+      <thead>
+      <tr>
+        <th style="width: 20px"></th>
+        <th>Name</th>
+      </tr>
+      </thead>
+      <tr *ngFor="let f of file.children">
+        <td><i class="oi oi-folder"></i></td>
+        <td><a [routerLink]="['/browser', f.pathId]">{{f.name}}</a></td>
+      </tr>
+    </table>
+  </div>
 </div>

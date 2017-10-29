@@ -39,4 +39,33 @@ export class BrowserComponent implements OnInit {
   previous(): void {
     this.location.back();
   }
+
+  isRoot(): boolean {
+    return this.file && !this.file.pathId;
+  }
+
+  splitPath(): SubPath[] {
+    if (!this.file || !this.file.pathId) {
+      return [];
+    }
+
+    const paths = [];
+    let parentId = '';
+    for (const p of this.file.pathId.split('/')) {
+      parentId += '/' + p;
+      paths.push(new SubPath(p, parentId));
+    }
+
+    if (paths.length <= 1) {
+      return [];
+    }
+
+    return paths.slice(0, paths.length - 1);
+  }
+}
+
+class SubPath {
+  constructor(public name: string,
+              public pathId: string) {
+  }
 }
