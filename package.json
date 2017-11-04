@@ -6,6 +6,7 @@
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json -o",
     "build": "ng build",
+    "publish": "./publish.sh --publish s3://dush-public/medima-pi/ --name medima-pi-ui",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

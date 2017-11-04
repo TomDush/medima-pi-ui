@@ -8,6 +8,13 @@ For best result, it must be used in conjunction of:
 
 * Medima PI (server): go lang REST service, designed to run on Raspberry PI 3, exposing available medias.
 
+## Building and Distribution
+
+To build and publish application, run:
+
+    npm run-script build && npm run-script publish
+
+Distributed as part of [medima-pi](https://github.com/TomDush/medima-pi).
 
 ## Contribute
 
@@ -15,7 +22,7 @@ For best result, it must be used in conjunction of:
 
 Checkout [medima-pi](https://github.com/TomDush/medima-pi) and run `./grun` to start server side (port 8080).  
 
-Then run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Then run `npm start` for a dev server (browser will open on `http://localhost:4200/`).
 
 
 ---------------------------------------
