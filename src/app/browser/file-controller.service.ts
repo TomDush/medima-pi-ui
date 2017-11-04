@@ -16,4 +16,9 @@ export class FileController {
   browseFile(path: string): Promise<File> {
     return this.http.get<File>('/api/browser/' + encodeURI(path)).toPromise();
   }
+
+
+  playMedia(path: string) {
+    this.http.get('/api/player/play?media=' + encodeURI(path)).subscribe();
+  }
 }

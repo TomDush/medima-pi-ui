@@ -10,13 +10,15 @@ import {HttpClientModule} from '@angular/common/http';
 import {FileController} from './browser/file-controller.service';
 import {BrowserComponent} from './browser/browser.component';
 import {NavbarComponent} from './layout/navbar/navbar.component';
+import { FileListComponent } from './browser/file-list/file-list.component';
 
 // TODO Understand this annotation
 @NgModule({
   declarations: [
     AppComponent,
     BrowserComponent,
-    NavbarComponent
+    NavbarComponent,
+    FileListComponent
   ],
   imports: [
     BrowserModule,
