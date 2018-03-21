@@ -1,12 +1,13 @@
 export class File {
-  name: string;
+  type: string;
+
   pathId: string;
-  root: string;
-
   parentId: string;
-  detailUrl: string;
 
-  playUrl: string;
+  name: string;
 
+  // only when type = dir
   children: File[];
+
+  playable: boolean;
 }
