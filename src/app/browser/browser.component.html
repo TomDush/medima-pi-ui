@@ -4,10 +4,12 @@
   <div *ngIf="file">
     <nav aria-label="breadcrumb" role="navigation">
       <ol class="breadcrumb">
-        <li *ngIf="!isRoot()" class="breadcrumb-item" aria-current="page"><a [routerLink]="['/browser']"><i
-          class="oi oi-home"></i> Shares</a>
+        <li *ngIf="!isRoot()" class="breadcrumb-item" aria-current="page">
+          <a [routerLink]="['/browser']"><i class="oi oi-home"></i> Shares</a>
         </li>
-        <li *ngIf="isRoot()" class="breadcrumb-item active" aria-current="page"><i class="oi oi-home"></i> Shares</li>
+        <li *ngIf="isRoot()" class="breadcrumb-item active" aria-current="page">
+          <i class="oi oi-home"></i> Shares
+        </li>
         <li *ngFor="let path of splitPath()" class="breadcrumb-item"><a [routerLink]="['/browser', path.pathId]">{{path.name}}</a>
         </li>
         <li *ngIf="!isRoot()" class="breadcrumb-item active" aria-current="page">{{file.name}}</li>

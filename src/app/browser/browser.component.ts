@@ -32,14 +32,6 @@ export class BrowserComponent implements OnInit {
       .subscribe(file => this.file = file);
   }
 
-  browseTo(pathId: string) {
-    this.browserService.browseFile(pathId).then(file => this.file = file);
-  }
-
-  previous(): void {
-    this.location.back();
-  }
-
   isRoot(): boolean {
     return this.file && !this.file.pathId;
   }

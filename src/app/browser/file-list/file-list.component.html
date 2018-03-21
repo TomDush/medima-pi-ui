@@ -10,7 +10,7 @@
     <td><a [routerLink]="['/browser', parentFile]">..</a></td>
   </tr>
   <tr *ngFor="let f of files">
-    <td><i class="oi" [class.oi-folder]="!isFile(f) && !isPlayable(f)" [class.oi-file]="isFile(f)"
+    <td><i class="oi" [class.oi-folder]="isDir(f)" [class.oi-file]="!isDir(f) && !isPlayable(f)"
            [class.oi-camera-slr]="isPlayable(f)"></i></td>
     <td><a *ngIf="isPlayable(f)" (click)="play(f)" class="float-right"><i class="oi oi-media-play"></i></a>
       <a [routerLink]="['/browser', f.pathId]">{{f.name}}</a></td>

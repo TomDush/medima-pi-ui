@@ -14,15 +14,12 @@ export class FileListComponent {
 
   constructor(private fileController: FileController){}
 
-  public isFile(file: File): boolean {
-    return !file.children && !this.isPlayable(file);
+  public isDir(file: File): boolean {
+    return file.type == 'dir';
   }
 
   public isPlayable(file: File): boolean {
-    const dots = file.name.split('.');
-    const ext = dots[dots.length - 1].toLowerCase();
-
-    return ['mkv', 'mp4', 'avi'].indexOf(ext) >= 0;
+    return file.type == 'media' && file.playable
   }
 
   public play(file: File) {
