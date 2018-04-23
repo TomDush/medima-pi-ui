@@ -10,7 +10,9 @@ import {HttpClientModule} from '@angular/common/http';
 import {FileController} from './browser/file-controller.service';
 import {BrowserComponent} from './browser/browser.component';
 import {NavbarComponent} from './layout/navbar/navbar.component';
-import { FileListComponent } from './browser/file-list/file-list.component';
+import {FileListComponent} from './browser/file-list/file-list.component';
+import {RemoteComponent} from './remote/remote.component';
+import {PlayerCtrlService} from "./remote/player-ctrl.service";
 
 // TODO Understand this annotation
 @NgModule({
@@ -18,7 +20,8 @@ import { FileListComponent } from './browser/file-list/file-list.component';
     AppComponent,
     BrowserComponent,
     NavbarComponent,
-    FileListComponent
+    FileListComponent,
+    RemoteComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +31,8 @@ import { FileListComponent } from './browser/file-list/file-list.component';
     NgbModule.forRoot()
   ],
   providers: [
-    FileController
+    FileController,
+    PlayerCtrlService
   ],
   bootstrap: [AppComponent]
 })

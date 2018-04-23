@@ -9,16 +9,13 @@ export class FileController {
   constructor(private http: HttpClient) {
   }
 
+  /** load available roots */
   browseRoot(): Promise<File> {
     return this.http.get<File>('/api/browser').toPromise();
   }
 
+  /** load content of a path, or details of a media */
   browseFile(path: string): Promise<File> {
     return this.http.get<File>('/api/browser/' + encodeURI(path)).toPromise();
-  }
-
-
-  playMedia(path: string) {
-    this.http.get('/api/player/play?media=' + encodeURI(path)).subscribe();
   }
 }

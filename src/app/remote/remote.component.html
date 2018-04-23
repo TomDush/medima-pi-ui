@@ -1,0 +1,52 @@
+<div class="row" xmlns="http://www.w3.org/1999/html">
+  <div class="col-sm-3 remote-quick-access" *ngIf="playing && status != null ; else nothingPlaying">
+    <div class="media-poster"></div>
+
+    <div class="remote-media-title">
+      <div class="media-path">{{status.media.realPath}}</div>
+      <div class="media-name">{{status.media.name}}</div>
+    </div>
+
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped progress-bar-animated"
+           role="progressbar"
+           [ngStyle]="{'width.%': progress$ |async}">
+        {{(currentPosition$|async)}}/{{status.length}}
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="btn-group">
+        <button type="button" class="btn btn-info" (click)="commandPlayer('bigBackward')">
+          <i class="oi oi-media-step-backward"></i>
+        </button>
+        <button type="button" class="btn btn-info" (click)="commandPlayer('backward')">
+          <i class="oi oi-media-skip-backward"></i>
+        </button>
+        <button type="button" class="btn btn-danger" (click)="commandPlayer('stop')">
+          <i class="oi oi-media-stop"></i>
+        </button>
+        <button type="button" class="btn btn-success" (click)="commandPlayer('pause')">
+          <i class="oi oi-media-pause"></i>
+        </button>
+        <button type="button" class="btn btn-info" (click)="commandPlayer('forward')">
+          <i class="oi oi-media-skip-forward"></i>
+        </button>
+        <button type="button" class="btn btn-info" (click)="commandPlayer('bigForward')">
+          <i class="oi oi-media-step-forward"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #nothingPlaying>
+    <div class="col-12">
+      <h3>No media playing</h3>
+      <div class="text-center">
+        <a [routerLink]="'/browser'">
+          <button class="btn btn-primary"> Browse medias</button>
+        </a>
+      </div>
+    </div>
+  </ng-template>
+</div>
