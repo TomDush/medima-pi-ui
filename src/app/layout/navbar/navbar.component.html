@@ -7,17 +7,25 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" [routerLink]="['/browser']">Browser</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/']">Media</a>
+      <li class="nav-item" *ngFor="let e of navEntries" [class.active]="isSelected(e)">
+        <a class="nav-link" [routerLink]="[e.path]">{{e.name}}</a>
       </li>
     </ul>
+
+    <form class="d-md-none" (submit)="redirectToSearch(searchPattern)">
+      <hr/>
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" [(ngModel)]="searchPattern" name="searchPatternSm">
+        <div class="input-group-append">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </div>
+      </div>
+    </form>
   </div>
 
-  <form class="form-inline my-2 my-lg-0 d-none d-sm-block">
-    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  <form class="form-inline my-2 my-lg-0 d-none d-md-block" (submit)="redirectToSearch(searchPattern)">
+    <input class="form-control mr-md-2" placeholder="Search" aria-label="Search" [(ngModel)]="searchPattern"
+           name="searchPatternSm">
+    <button class="btn btn-outline-success my-2 my-md-0" type="submit">Search</button>
   </form>
 </nav>

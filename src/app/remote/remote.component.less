@@ -1,0 +1,46 @@
+.media-poster {
+  margin: 20px auto;
+  width: 150px;
+  height: 200px;
+  background-color: lightgray;
+}
+
+.remote-controls {
+  text-align: center;
+}
+
+@screen-md-min: 768px;
+
+.remote-media-path {
+  font-size: 0.8em;
+  color: grey;
+  font-style: italic;
+
+  @media (min-width: @screen-md-min) {
+    font-size: 1em;
+  }
+}
+
+.remote-media-name {
+  font-size: 1.1em;
+  font-weight: bold;
+
+  @media (min-width: @screen-md-min) {
+    font-size: 1.4em;
+  }
+}
+
+.remote-content {
+  @media (min-width: @screen-md-min) {
+    margin-top: 20px;
+  }
+}
+
+.progress {
+  margin-bottom: 10px;
+
+  .progress-bar {
+    //word-wrap: unset;
+    text-wrap: avoid;
+  }
+}

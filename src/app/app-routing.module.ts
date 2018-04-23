@@ -1,6 +1,8 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {BrowserComponent} from './browser/browser.component';
+import {RemoteComponent} from "./remote/remote.component";
+import {SearchComponent} from "./search/search.component";
 
 const routes: Routes = [
   {
@@ -15,6 +17,14 @@ const routes: Routes = [
   {
     path: 'browser/:file',
     component: BrowserComponent
+  },
+  {
+    path: 'remote',
+    component: RemoteComponent
+  },
+  {
+    path: 'search',
+    component: SearchComponent
   }
 ];
 

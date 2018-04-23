@@ -4,6 +4,7 @@ import {File} from './domain';
 import 'rxjs/add/operator/switchMap';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Location} from '@angular/common';
+import {PlayerCtrlService} from "../remote/player-ctrl.service";
 
 @Component({
   selector: 'app-browser',
@@ -15,8 +16,7 @@ export class BrowserComponent implements OnInit {
   file: File;
 
   constructor(private browserService: FileController,
-              private route: ActivatedRoute,
-              private location: Location) {
+              private route: ActivatedRoute) {
   }
 
   ngOnInit() {

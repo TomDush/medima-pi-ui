@@ -1,0 +1,58 @@
+<div class="row" *ngIf="playing && status != null ; else nothingPlaying">
+  <div class="col-md-3">
+    <div class="media-poster"></div>
+  </div>
+
+  <div class="col-md-9 remote-content">
+    <h4 class="remote-media-path">{{status.media.realPath}}</h4>
+    <h1 class="remote-media-name">{{status.media.name}}</h1>
+
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped progress-bar-animated"
+           role="progressbar"
+           [ngStyle]="{'width.%': progress$ |async}">
+        {{formatTimePosition(currentPosition$|async)}}/{{formatTimePosition(status.length)}}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="remote-controls">
+      <div class="btn-group">
+        <button type="button" class="btn btn-info" (click)="commandPlayer('bigBackward')">
+          <i class="oi oi-media-step-backward"></i>
+        </button>
+        <button type="button" class="btn btn-info" (click)="commandPlayer('backward')">
+          <i class="oi oi-media-skip-backward"></i>
+        </button>
+        <button type="button" class="btn btn-danger" (click)="commandPlayer('stop')">
+          <i class="oi oi-media-stop"></i>
+        </button>
+        <button type="button" class="btn btn-success" (click)="commandPlayer('pause')">
+          <i class="oi" [class.oi-media-pause]="!status.playing || !status.paused"
+             [class.oi-media-play]="status.paused"></i>
+        </button>
+        <button type="button" class="btn btn-info" (click)="commandPlayer('forward')">
+          <i class="oi oi-media-skip-forward"></i>
+        </button>
+        <button type="button" class="btn btn-info" (click)="commandPlayer('bigForward')">
+          <i class="oi oi-media-step-forward"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #nothingPlaying>
+  <div class="row">
+    <div class="col-12">
+      <h3>No media playing</h3>
+      <div class="text-center">
+        <a [routerLink]="'/browser'">
+          <button class="btn btn-primary"> Browse medias</button>
+        </a>
+      </div>
+    </div>
+  </div>
+</ng-template>

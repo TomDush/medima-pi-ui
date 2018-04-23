@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {File} from './domain';
 import {HttpClient} from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class FileController {
@@ -9,16 +10,17 @@ export class FileController {
   constructor(private http: HttpClient) {
   }
 
-  browseRoot(): Promise<File> {
+  /** load available roots */
+  public browseRoot(): Promise<File> {
     return this.http.get<File>('/api/browser').toPromise();
   }
 
-  browseFile(path: string): Promise<File> {
+  /** load content of a path, or details of a media */
+  public browseFile(path: string): Promise<File> {
     return this.http.get<File>('/api/browser/' + encodeURI(path)).toPromise();
   }
 
-
-  playMedia(path: string) {
-    this.http.get('/api/player/play?media=' + encodeURI(path)).subscribe();
+  public search(pattern: string): Observable<File[]> {
+    return this.http.get<File[]>('/api/search?pattern=' + encodeURI(pattern));
   }
 }

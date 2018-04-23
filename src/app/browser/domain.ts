@@ -4,6 +4,7 @@ export class File {
   pathId: string;
   parentId: string;
 
+  realPath: string;
   name: string;
 
   // only when type = dir
