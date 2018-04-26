@@ -21,6 +21,7 @@ Options:
 	--dir <dir>    			Directory to tarball and publish (default $TARGET)
 	--publish <baz>			s3 url where tarball must be published. If not defined, just create the tarball
 	--name <name>    		tarball final name
+	--snapshot <dest>   Copy binary to a remote server using scp
 EOF
 }
 # Args: message [color] [exit=-1]
@@ -50,6 +51,7 @@ function info() {
 DEBUG=0
 TARGET="$DIR/dist"
 PUBLISH=""
+SCP_DEST=""
 
 # Parse options
 while [[ $# -ge 1 ]]
@@ -74,6 +76,11 @@ do
 		shift
 		;;
 
+	--snapshot)
+	  SCP_DEST=$2
+	  shift
+	  ;;
+
 	*)
     echoe "Argument not expected: $arg." RED
     print_help
@@ -88,7 +95,7 @@ if [[ -z $NAME ]] ; then
   echoe "ERROR: name is mandatory (--name <name>)" RED -1
 fi
 
-echoe "Publishing directory $TARGET to $PUBLISH" YELLOW
+echoe "Publishing directory $TARGET to '$PUBLISH' and/or '$SCP_DEST'" YELLOW
 TARBALL="$TARGET/$NAME.tar.gz"
 CURRENT=`pwd`
 
@@ -101,11 +108,17 @@ debug "moving tarball in directory $TARBALL"
 cd $CURRENT
 mv "$TARGET/../$NAME" "$TARBALL"
 
-if [[ -z "$PUBLISH" ]] ; then
+if [[ -z "$PUBLISH" && -z "$SCP_DEST" ]] ; then
   echoe "SUCCESS: tarball has created: $CYAN$TARBALL" GREEN
 
 else
-  debug "Publish tarball to $PUBLISH"
-  aws s3 cp "$TARBALL" "$PUBLISH"
-  echoe "SUCCESS: tarball has been deployed to $CYAN$PUBLISH" GREEN
+  if [[ "$SCP_DEST" != "" ]] ; then
+    scp dist/medima-pi-ui.tar.gz $SCP_DEST
+  fi
+
+  if [[ "$PUBLISH" != "" ]] ; then
+    debug "Publish tarball to $PUBLISH"
+    aws s3 cp "$TARBALL" "$PUBLISH"
+    echoe "SUCCESS: tarball has been deployed to $CYAN$PUBLISH" GREEN
+  fi
 fi
