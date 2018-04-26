@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {File} from "../browser/domain";
 import {PlayerCtrlService, PlayerStatus, TimePosition} from "./player-ctrl.service";
 import {Observable} from 'rxjs/Rx';
 import {filter, map} from "rxjs/operators";
@@ -24,14 +23,14 @@ export class RemoteComponent implements OnInit {
   ngOnInit() {
     this.playerCtrlService.status().then(status => {
       // MOCK
-      status = new PlayerStatus();
-      status.playing = true;
-      status.media = new File();
-
-      status.media.name = "Ironman II (2012)";
-      status.media.realPath = "/data/Media/Movies/Avengers";
-      status.position = new TimePosition(0, 0, 22);
-      status.length = new TimePosition(0, 1, 0);
+      // status = new PlayerStatus();
+      // status.playing = true;
+      // status.media = new File();
+      //
+      // status.media.name = "Ironman II (2012)";
+      // status.media.realPath = "/data/Media/Movies/Avengers";
+      // status.position = new TimePosition(0, 0, 22);
+      // status.length = new TimePosition(0, 1, 0);
       // END MOCK
 
       // Update UI
@@ -51,7 +50,7 @@ export class RemoteComponent implements OnInit {
   private startObservablesPipes() {
     this.currentPosition$ = Observable.interval(1000).pipe(
       // Tick all the time but do nothing if no media playing
-      filter(_ => this.playing && this.status != null && !this.status.paused),
+      filter(_ => this.playing && this.status != null && !this.status.paused && this.status.position != null),
 
       // delta in milliseconds between last time server gave position and now
       map(_ => {
@@ -60,6 +59,7 @@ export class RemoteComponent implements OnInit {
 
       // recompute position - max to this.status.length
       map(delta => {
+        // console.log("Position: " + (this.status.position instanceof TimePosition) + " / addSeconds " + this.status.position.addSeconds);
         let actualPosition = this.status.position.addSeconds(delta / 1000);
         return this.status.length == null || actualPosition.lessThan(this.status.length) ? actualPosition : this.status.length;
       })
@@ -73,5 +73,9 @@ export class RemoteComponent implements OnInit {
 
   public commandPlayer(command: string) {
     this.playerCtrlService.executeCommand(command).then(status => this.updateStatus(status));
+  }
+
+  public formatTimePosition(pos: TimePosition): string {
+    return pos == null ? '-' : pos.toString();
   }
 }

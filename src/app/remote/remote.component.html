@@ -1,21 +1,23 @@
-<div class="row" xmlns="http://www.w3.org/1999/html">
-  <div class="col-sm-3 remote-quick-access" *ngIf="playing && status != null ; else nothingPlaying">
+<div class="row" *ngIf="playing && status != null ; else nothingPlaying">
+  <div class="col-md-3">
     <div class="media-poster"></div>
+  </div>
 
-    <div class="remote-media-title">
-      <div class="media-path">{{status.media.realPath}}</div>
-      <div class="media-name">{{status.media.name}}</div>
-    </div>
+  <div class="col-md-9 remote-content">
+    <h4 class="remote-media-path">{{status.media.realPath}}</h4>
+    <h1 class="remote-media-name">{{status.media.name}}</h1>
 
     <div class="progress">
       <div class="progress-bar progress-bar-striped progress-bar-animated"
            role="progressbar"
            [ngStyle]="{'width.%': progress$ |async}">
-        {{(currentPosition$|async)}}/{{status.length}}
+        {{formatTimePosition(currentPosition$|async)}}/{{formatTimePosition(status.length)}}
       </div>
     </div>
+  </div>
 
-    <div class="controls">
+  <div class="col-md-3">
+    <div class="remote-controls">
       <div class="btn-group">
         <button type="button" class="btn btn-info" (click)="commandPlayer('bigBackward')">
           <i class="oi oi-media-step-backward"></i>
@@ -27,7 +29,8 @@
           <i class="oi oi-media-stop"></i>
         </button>
         <button type="button" class="btn btn-success" (click)="commandPlayer('pause')">
-          <i class="oi oi-media-pause"></i>
+          <i class="oi" [class.oi-media-pause]="!status.playing || !status.paused"
+             [class.oi-media-play]="status.paused"></i>
         </button>
         <button type="button" class="btn btn-info" (click)="commandPlayer('forward')">
           <i class="oi oi-media-skip-forward"></i>
@@ -39,7 +42,10 @@
     </div>
   </div>
 
-  <ng-template #nothingPlaying>
+</div>
+
+<ng-template #nothingPlaying>
+  <div class="row">
     <div class="col-12">
       <h3>No media playing</h3>
       <div class="text-center">
@@ -48,5 +54,5 @@
         </a>
       </div>
     </div>
-  </ng-template>
-</div>
+  </div>
+</ng-template>

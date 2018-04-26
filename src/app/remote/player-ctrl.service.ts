@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {File} from "../browser/domain";
 import {HttpClient} from "@angular/common/http";
+import {map} from "rxjs/operators";
 
 @Injectable()
 export class PlayerCtrlService {
@@ -13,7 +14,20 @@ export class PlayerCtrlService {
   }
 
   public status(): Promise<PlayerStatus> {
-    return this.http.get<PlayerStatus>('/api/player/status').toPromise()
+    return this.http.get<PlayerStatus>('/api/player/status')
+      .pipe(
+        map(st => {
+          st.updated = new Date();
+          if (!(st.position instanceof TimePosition)) {
+            st.position = null;
+          }
+          if (!(st.length instanceof TimePosition)) {
+            st.length = null;
+          }
+
+          return st;
+        })
+      ).toPromise()
   }
 
   public executeCommand(command: string): Promise<PlayerStatus> {
@@ -32,29 +46,38 @@ export class PlayerCtrlService {
 }
 
 export class TimePosition {
+  public hours: number;
+  public minutes: number;
+  public seconds: number;
 
-  constructor(public hours: number, public minute: number, public seconds: number) {
+  public static fromTime(hours: number, minutes: number, seconds: number): TimePosition {
+    let pos = new TimePosition();
+    pos.hours = hours;
+    pos.minutes = minutes;
+    pos.seconds = seconds;
+
+    return pos
   }
 
-  addSeconds(seconds: number): TimePosition {
-    const minutes = Math.floor(this.minute + (this.seconds + seconds) / 60);
-    return new TimePosition(
+  public addSeconds(seconds: number): TimePosition {
+    const minutes = Math.floor(this.minutes + (this.seconds + seconds) / 60);
+    return TimePosition.fromTime(
       Math.floor(this.hours + minutes / 60),
       minutes % 60,
       Math.floor((this.seconds + seconds) % 60)
     )
   }
 
-  inSeconds() {
-    return this.hours * 3600 + this.minute * 60 + this.seconds;
+  public inSeconds() {
+    return this.hours * 3600 + this.minutes * 60 + this.seconds;
   }
 
   public toString(): string {
     let hoursPrefix = this.hours > 0 ? this.hours + ':' : '';
-    return hoursPrefix + this.minute + ':' + this.seconds;
+    return hoursPrefix + this.minutes + ':' + this.seconds;
   }
 
-  lessThan(pos: TimePosition) {
+  public lessThan(pos: TimePosition) {
     return this.inSeconds() <= pos.inSeconds();
   }
 }
