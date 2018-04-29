@@ -1,10 +1,10 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subscription} from "rxjs/Subscription";
 import {FileController} from "../browser/file-controller.service";
 import {File} from "../browser/domain";
 import {Subject} from "rxjs/Subject";
-import {debounceTime, distinctUntilChanged, map, switchMap} from "rxjs/operators";
+import {debounceTime, distinctUntilChanged, map, switchMap, tap} from "rxjs/operators";
 import {Observable} from "rxjs/Observable";
 
 @Component({
@@ -12,10 +12,10 @@ import {Observable} from "rxjs/Observable";
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.less']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
 
   public files$: Observable<File[]>;
-  public loading: boolean = false;
+  public loading: boolean = true;
 
   @ViewChild("searchInput", {read: ElementRef}) searchInputRef: ElementRef;
 
@@ -29,37 +29,41 @@ export class SearchComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.files$ = this.searchTerms.pipe(
+    // Change URL while typing
+    this.sub = this.searchTerms.pipe(
       debounceTime(300),
-      distinctUntilChanged(),
-      switchMap((pattern: string) => {
-        this.loading = true;
-        let obs = Observable.of([]);
-        if (pattern) {
-          obs = this.fileController.search(pattern);
-        }
+      distinctUntilChanged()
+    ).subscribe((pattern: string) => {
+      let p = pattern ? pattern : "";
+      this.router.navigate(['/search'], {queryParams: {pattern: p}});
+    });
 
-        return obs.map(files => [pattern, files])
-      }),
-      map((patternAndResult: any[]) => {
-        // update URL and loading flag
-        console.log("received " + patternAndResult);
-        this.router.navigate(['/search'], {queryParams: {pattern: patternAndResult[0]}});
-        this.loading = false;
-
-        // Only return list of files
-        return patternAndResult[1];
-      })
-    );
-
-    this.sub = this.route
+    // Search & update display
+    let firstPass = true;
+    this.files$ = this.route
       .queryParams
-      .debounceTime(500) // server answer too quickly for async pipe to have created the subscription...
-      .subscribe(params => {
-        let pattern = params['pattern'];
-        this.search(pattern);
-        this.searchInputRef.nativeElement.value = pattern;
-      });
+      .pipe(
+        map(params => params['pattern']),
+        distinctUntilChanged(),
+        switchMap((pattern: string) => {
+          this.loading = true;
+          let obs = Observable.of([]);
+          if (pattern) {
+            obs = this.fileController.search(pattern);
+          }
+
+          if (firstPass) {
+            setTimeout(_ => {
+              this.searchInputRef.nativeElement.value = pattern;
+              firstPass = false;
+            });
+          }
+
+          return obs.pipe(
+            tap(_ => this.loading = false)
+          );
+        })
+      );
   }
 
   public search(pattern: string) {

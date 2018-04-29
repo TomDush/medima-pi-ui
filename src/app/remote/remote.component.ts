@@ -1,14 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PlayerCtrlService, PlayerStatus, TimePosition} from "./player-ctrl.service";
 import {Observable} from 'rxjs/Rx';
 import {filter, map} from "rxjs/operators";
+import {Subject} from "rxjs/Subject";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
   selector: 'app-remote',
   templateUrl: './remote.component.html',
   styleUrls: ['./remote.component.less']
 })
-export class RemoteComponent implements OnInit {
+export class RemoteComponent implements OnInit, OnDestroy {
 
   public playing: boolean = false;
   // derived and kept from status
@@ -17,22 +19,13 @@ export class RemoteComponent implements OnInit {
   public currentPosition$: Observable<TimePosition>;
   public progress$: Observable<number>;
 
+  private sub: Subscription;
+
   constructor(private playerCtrlService: PlayerCtrlService) {
   }
 
   ngOnInit() {
     this.playerCtrlService.status().then(status => {
-      // MOCK
-      // status = new PlayerStatus();
-      // status.playing = true;
-      // status.media = new File();
-      //
-      // status.media.name = "Ironman II (2012)";
-      // status.media.realPath = "/data/Media/Movies/Avengers";
-      // status.position = new TimePosition(0, 0, 22);
-      // status.length = new TimePosition(0, 1, 0);
-      // END MOCK
-
       // Update UI
       this.updateStatus(status);
     });
@@ -59,16 +52,19 @@ export class RemoteComponent implements OnInit {
 
       // recompute position - max to this.status.length
       map(delta => {
-        // console.log("Position: " + (this.status.position instanceof TimePosition) + " / addSeconds " + this.status.position.addSeconds);
         let actualPosition = this.status.position.addSeconds(delta / 1000);
         return this.status.length == null || actualPosition.lessThan(this.status.length) ? actualPosition : this.status.length;
       })
-    )
-    ;
-
-    this.progress$ = this.currentPosition$.pipe(
-      map(current => this.status.length != null ? 100 * current.inSeconds() / this.status.length.inSeconds() : 50)
     );
+
+    // Progress is derived from currentPosition$ updates
+    let timePositionSubject = new Subject<TimePosition>();
+
+    this.progress$ = timePositionSubject.asObservable().map(
+      (current: TimePosition) => this.status.length != null ? 100 * current.inSeconds() / this.status.length.inSeconds() : 50
+    );
+
+    this.sub = this.currentPosition$.subscribe(pos => timePositionSubject.next(pos));
   }
 
   public commandPlayer(command: string) {
@@ -77,5 +73,9 @@ export class RemoteComponent implements OnInit {
 
   public formatTimePosition(pos: TimePosition): string {
     return pos == null ? '-' : pos.toString();
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 }
