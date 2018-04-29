@@ -18,16 +18,20 @@ export class PlayerCtrlService {
       .pipe(
         map(st => {
           st.updated = new Date();
-          if (!(st.position instanceof TimePosition)) {
-            st.position = null;
-          }
-          if (!(st.length instanceof TimePosition)) {
-            st.length = null;
-          }
+          st.position = this.castToTimePosition(st.position);
+          st.length = this.castToTimePosition(st.length);
 
           return st;
         })
       ).toPromise()
+  }
+
+  private castToTimePosition(pos: TimePosition): TimePosition {
+    if (pos) {
+      return TimePosition.fromTime(pos.hours, pos.minutes, pos.seconds);
+    }
+
+    return pos
   }
 
   public executeCommand(command: string): Promise<PlayerStatus> {

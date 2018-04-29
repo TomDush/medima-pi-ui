@@ -13,6 +13,7 @@ import {NavbarComponent} from './layout/navbar/navbar.component';
 import {FileListComponent} from './browser/file-list/file-list.component';
 import {RemoteComponent} from './remote/remote.component';
 import {PlayerCtrlService} from "./remote/player-ctrl.service";
+import {SearchComponent} from './search/search.component';
 
 // TODO Understand this annotation
 @NgModule({
@@ -21,7 +22,8 @@ import {PlayerCtrlService} from "./remote/player-ctrl.service";
     BrowserComponent,
     NavbarComponent,
     FileListComponent,
-    RemoteComponent
+    RemoteComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,

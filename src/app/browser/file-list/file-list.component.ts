@@ -12,6 +12,7 @@ export class FileListComponent {
 
   @Input() files: File[];
   @Input() parentFile: string;
+  @Input() withParentLink: boolean = false;
 
   constructor(private fileController: FileController,
               private playerCtrlService: PlayerCtrlService){}
@@ -21,7 +22,7 @@ export class FileListComponent {
   }
 
   public isPlayable(file: File): boolean {
-    return file.type == 'media' && file.playable
+    return file.type == 'media' && file.playable;
   }
 
   public play(file: File) {

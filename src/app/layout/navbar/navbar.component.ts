@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Location} from "@angular/common";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-navbar',
@@ -10,13 +11,16 @@ export class NavbarComponent implements OnInit {
 
   public navEntries: NavEntry[];
 
-  constructor(private location: Location) {
+  public searchPattern: string;
+
+  constructor(private location: Location, private router: Router) {
   }
 
   ngOnInit(): void {
     this.navEntries = [
       new NavEntry('/browser', 'Browser'),
-      new NavEntry('/remote', 'Remote Control')
+      new NavEntry('/remote', 'Remote Control'),
+      new NavEntry('/search', 'Search')
     ]
   }
 
@@ -24,6 +28,10 @@ export class NavbarComponent implements OnInit {
     return this.location.path().indexOf(nav.path) == 0
   }
 
+  public redirectToSearch(searchPattern: string) {
+    this.router.navigate(['/search'], {queryParams: {pattern: searchPattern}})
+    this.searchPattern = "";
+  }
 }
 
 export class NavEntry {

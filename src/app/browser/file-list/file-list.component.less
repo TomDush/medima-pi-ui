@@ -1,3 +1,27 @@
 a.btn-primary {
   color: white;
 }
+
+td {
+  max-width: 10vw;
+
+  &.playable {
+    padding-right: 30px;
+  }
+}
+
+td a {
+  display: block;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+
+  &.media-path, &.media-path:visited, &.media-path:hover, &.media-path:active {
+    font-size: 0.7em;
+    color: grey;
+  }
+  &.media-name {
+    font-size: 0.9em;
+  }
+}

@@ -1,0 +1,21 @@
+<div class="row">
+  <h1 class="col-sm-8">
+    Search
+    <span *ngIf="loading" class="search-loading"><i class="oi oi-cog oi-spin"></i> Loading...</span>
+  </h1>
+  <div class="col-md-4">
+    <div class="input-group">
+      <span (click)="searchInput.value = ''; search('')" *ngIf="searchInput.value"><i class="oi oi-circle-x"></i></span>
+      <input type="text" class="form-control mt-2"
+             placeholder="Search Pattern"
+             #searchInput
+             (keyup)="search(searchInput.value)" style="width: 100%">
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col">
+    <app-file-list [files]="files$ | async" [withParentLink]="true"></app-file-list>
+  </div>
+</div>

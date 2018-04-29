@@ -9,10 +9,19 @@
     <td><i class="oi oi-folder"></i></td>
     <td><a [routerLink]="['/browser', parentFile]">..</a></td>
   </tr>
+  <tr *ngIf="!files || files.length == 0">
+    <td colspan="2" class="text-center"><i class="oi oi-info"></i> No file found.</td>
+  </tr>
   <tr *ngFor="let f of files">
-    <td><i class="oi" [class.oi-folder]="isDir(f)" [class.oi-file]="!isDir(f) && !isPlayable(f)"
-           [class.oi-camera-slr]="isPlayable(f)"></i></td>
-    <td><a *ngIf="isPlayable(f)" (click)="play(f)" class="btn btn-primary btn-sm float-right"><i class="oi oi-media-play"></i></a>
-      <a [routerLink]="['/browser', f.pathId]">{{f.name}}</a></td>
+    <td class="align-middle"><i class="oi" [class.oi-folder]="isDir(f)" [class.oi-file]="!isDir(f) && !isPlayable(f)"
+                                [class.oi-camera-slr]="isPlayable(f)"></i></td>
+    <td>
+      <a *ngIf="isPlayable(f)" (click)="play(f)" class="btn btn-primary btn-sm float-right"><i
+        class="oi oi-media-play"></i></a>
+      <div class="search-labels" [class.playable]="isPlayable(f)">
+        <a [routerLink]="['/browser', f.parentId]" class="media-path" *ngIf="withParentLink">{{f.realPath}}</a>
+        <a [routerLink]="['/browser', f.pathId]" class="media-name">{{f.name}}</a>
+      </div>
+    </td>
   </tr>
 </table>
