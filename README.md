@@ -1,8 +1,10 @@
 # Medima PI UI
 
+[![CircleCI](https://circleci.com/gh/TomDush/medima-pi-ui.svg?style=svg)](https://circleci.com/gh/TomDush/medima-pi-ui)
+
 ## Abstract
 
-This application is part of Medima Project: a multi part application providing tools to manage more efficiently medias.
+This application is part of *Medima Project*: a multi part application providing tools to manage more efficiently medias.
 
 For best result, it must be used in conjunction of:
 

@@ -1,0 +1,68 @@
+# Golang CircleCI 2.0 configuration file
+version: 2
+jobs:
+  test:
+    docker:
+      - image: tomdush/circleci-node-aws:9
+
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: test
+          command: npm test
+      - store_artifacts:
+          path: test-results.xml
+          prefix: tests
+      - store_test_results:
+          path: test-results.xml
+
+  build-n-deploy:
+    docker:
+      - image: tomdush/circleci-node-aws:9
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+
+      - run:
+          name: build
+          command: npm run-script build
+      - run:
+          name: publish
+          command: npm run-script publish
+
+      - store_artifacts:
+          path: dist/medima-pi-ui.tar.gz
+      - store_artifacts:
+          path: test-results.xml
+          prefix: tests
+      - store_test_results:
+          path: test-results.xml
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - test:
+          filters:
+            branches:
+              ignore: master
+
+      - build-n-deploy:
+          filters:
+            branches:
+              only: master
