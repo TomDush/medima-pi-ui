@@ -10,6 +10,17 @@ For best result, it must be used in conjunction of:
 
 * Medima PI (server): go lang REST service, designed to run on Raspberry PI 3, exposing available medias.
 
+## Run locally
+
+Setup environment, requires NodeJS and NPM:
+
+    npm install -g @angular/cli
+    npm install
+    
+Run app locally:
+
+    ng serve --proxy-config proxy.conf.json --open
+    
 ## Building and Distribution
 
 To build and publish application, run:
